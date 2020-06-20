@@ -1,0 +1,33 @@
+{
+  "name": "node-express-app",
+  "version": "0.0.1",
+  "description": "Workouts for node express app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jithin-sathyan/node-express-app.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "demo",
+    "apps"
+  ],
+  "author": "Jithin Sathyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jithin-sathyan/node-express-app/issues"
+  },
+  "homepage": "https://github.com/jithin-sathyan/node-express-app#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
