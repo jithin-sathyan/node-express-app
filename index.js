@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const fs = require('fs');
+const viewEngines = require("consolidate");
 
 const users = [];
+app.engine("hbs", viewEngines.handlebars);
+app.set('veiws', "./views");
+app.set("view engine", "hbs");
 
 try {
     fs.readFile("./userDetails.json", { encoding: 'utf8' }, (error, data) => {
@@ -27,11 +31,7 @@ app.get("/basic-route", (req, res) => {
 });
 
 app.get("/user-list", (req, res) => {
-    let stringifiedUserList = '';
-    users.forEach((eachUser) => {
-        stringifiedUserList += `<a href=/${eachUser.first_name}-${eachUser.last_name}>${eachUser.first_name} ${eachUser.last_name}</a> <br/>`;
-    });
-    res.send(stringifiedUserList);
+    res.render("index", { users: users });
 });
 
 app.get(/.*ea.*/, (req, res, next) => {

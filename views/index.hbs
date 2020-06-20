@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>User List</title>
+</head>
+
+<body>
+    <h1>User List</h1>
+    <p>rendered using handlebars</p>
+    <ul>
+        {{#each users as |user|}}
+        <li><a href="/{{user.first_name}}-{{user.last_name}}">{{user.first_name}} {{user.last_name}}</a></li>
+        {{/each}}
+    </ul>
+</body>
+
+</html>
