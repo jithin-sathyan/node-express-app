@@ -4,6 +4,7 @@ const fs = require('fs');
 const viewEngines = require("consolidate");
 
 const users = [];
+app.use("/profile-pics", express.static("images"))
 app.engine("hbs", viewEngines.handlebars);
 app.set('veiws', "./views");
 app.set("view engine", "hbs");
@@ -47,7 +48,7 @@ app.get(/Gia.*/, (req, res, next) => {
 
 app.get('/:username', (req, res) => {
     const username = req.params.username.split('-');
-    res.send(`${username[0]} ${username[1]}`);
+    res.render("user", { firstName: username[0], lastName: username[1] });
 })
 
 try {

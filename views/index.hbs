@@ -4,16 +4,38 @@
 <head>
     <meta charset="UTF-8" />
     <title>User List</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        div {
+            display: : flex;
+            align-items: center;
+            padding: 1em;
+            font-size: 1.2em;
+        }
+
+        div a {
+            padding-left: 0.5em;
+        }
+
+        img {
+            width: 6em;
+            height: 4em;
+        }
+    </style>
 </head>
 
 <body>
     <h1>User List</h1>
     <p>rendered using handlebars</p>
-    <ul>
-        {{#each users as |user|}}
-        <li><a href="/{{user.first_name}}-{{user.last_name}}">{{user.first_name}} {{user.last_name}}</a></li>
-        {{/each}}
-    </ul>
+    {{#each users as |user|}}
+    <div>
+        <img src="/profile-pics/{{user.first_name}}-{{user.last_name}}-sm.jpg" alt="user-details" />
+        <a href="/{{user.first_name}}-{{user.last_name}}">{{user.first_name}} {{user.last_name}}</a>
+    </div>
+    {{/each}}
 </body>
 
 </html>
