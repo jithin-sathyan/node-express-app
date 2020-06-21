@@ -4,17 +4,133 @@
 <head>
     <meta charset="UTF-8" />
     <title>User List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         img {
             width: 32em;
             height: 28em;
         }
+
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        div {
+            display: : flex;
+            align-items: center;
+            padding: 1em;
+            font-size: 1.2em;
+        }
+
+        div a {
+            padding-left: 0.5em;
+        }
+
+        .edit {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
-    <h1>{{firstName}} {{lastName}}</h1>
-    <img src="/profile-pics/{{firstName}}-{{lastName}}-lg.jpg" alt="user-details-page" />
+    <div>
+        <a href="/user-list">Back to User List</a>
+    </div>
+    <div>
+        <img src="/profile-pics/{{user.first_name}}-{{user.last_name}}-md.jpg" alt="user-details-page" />
+        <p>
+            <button onclick="edit()">Edit</button>
+            <button onclick="deleteUser()">Delete</button>
+        </p>
+    </div>
+
+    <h1>{{user.first_name}} {{user.last_name}}</h1>
+    <dl>
+
+        <dt>Street
+        </dt>
+        <dd class="view">
+            {{address.house}}
+        </dd>
+        <dd class="edit">
+            <input id="street" type="text" value="{{address.house}}" />
+        </dd>
+        <br />
+        <dt>City
+        </dt>
+        <dd class="view">
+            {{address.city}}
+        </dd>
+        <dd class="edit">
+            <input id="city" type="text" value="{{address.city}}" />
+        </dd>
+        <br />
+        <dt> State
+        </dt>
+        <dd class="view">
+            {{address.state}}
+        </dd>
+        <dd class="edit">
+            <input id="state" type="text" value="{{address.state}}" />
+        </dd>
+        <br />
+        <dt> Zip
+        </dt>
+        <dd class="view">
+            {{address.zip}}
+        </dd>
+        <dd class="edit">
+            <input id="zip" type="text" value="{{address.zip}}" />
+        </dd>
+        <br />
+        <dt></dt>
+        <dd class="edit">
+            <input type="submit" value="Save" onclick="save()" />
+            <input type="submit" value="Cancel" onclick="cancel()" />
+        </dd>
+    </dl>
+    <script>
+        $(window).on("load", function() {
+            $('.view').show();
+            $('.edit').hide();
+
+        });
+
+        function edit() {
+            $('.view').hide();
+            $('.edit').show();
+        };
+
+        function cancel() {
+            $('.view').show();
+            $('.edit').hide();
+        };
+
+        function save() {
+            $.ajax('/{{user.first_name}}-{{user.last_name}}', {
+                method: "PUT",
+                data: {
+                    house: $('#street').val(),
+                    city: $('#city').val(),
+                    state: $('#state').val(),
+                    zip: $('#zip').val(),
+                },
+                complete: function () {
+                    cancel();
+                    location.reload();
+                }
+            });
+        };
+
+        function deleteUser() {
+            $.ajax('/{{user.first_name}}-{{user.last_name}}', {
+                method: "DELETE",
+                complete: function () {
+                    location = "/user-list";
+                }
+            })
+        };
+    </script>
 </body>
 
 </html>

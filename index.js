@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const fs = require('fs');
 const viewEngines = require("consolidate");
+const getUser = require("./getUser");
 
 const users = [];
 app.use("/profile-pics", express.static("images"))
@@ -15,7 +16,7 @@ try {
             throw error
         }
         JSON.parse(data).forEach((eachUserData) => {
-            users.push({ ...eachUserData });
+            users.push({ ...eachUserData, address: { ...eachUserData.address } });
         })
     });
 }
@@ -48,7 +49,9 @@ app.get(/Gia.*/, (req, res, next) => {
 
 app.get('/:username', (req, res) => {
     const username = req.params.username.split('-');
-    res.render("user", { firstName: username[0], lastName: username[1] });
+    const user = getUser(users, username[0], username[1]);
+    const { address } = user;
+    res.render("user", { user: user, address });
 })
 
 try {
