@@ -11,6 +11,23 @@
             height: 28em;
         }
 
+        .height-2 {
+            height: 2em;
+        }
+
+        .font-size-1 {
+            font-size: 1em;
+        }
+
+        .font-weight-700 {
+            font-weight: 700;
+        }
+
+        .common-button {
+            height: 3em;
+            margin: .5em 0 .5em 0;
+        }
+
         * {
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -39,58 +56,58 @@
     <div>
         <img src="/profile-pics/{{user.first_name}}-{{user.last_name}}-md.jpg" alt="user-details-page" />
         <p>
-            <button onclick="edit()">Edit</button>
-            <button onclick="deleteUser()">Delete</button>
+            <button class="common-button font-weight-700" onclick="edit()">Edit</button>
+            <button class="common-button font-weight-700" onclick="deleteUser()">Delete</button>
         </p>
     </div>
 
     <h1>{{user.first_name}} {{user.last_name}}</h1>
     <dl>
 
-        <dt>Street
+        <dt>Street :
         </dt>
-        <dd class="view">
+        <dd class="view font-weight-700">
             {{address.house}}
         </dd>
         <dd class="edit">
-            <input id="street" type="text" value="{{address.house}}" />
+            <input class="font-size-1 height-2" id="street" type="text" value="{{address.house}}" />
         </dd>
         <br />
-        <dt>City
+        <dt>City :
         </dt>
-        <dd class="view">
+        <dd class="view font-weight-700">
             {{address.city}}
         </dd>
         <dd class="edit">
-            <input id="city" type="text" value="{{address.city}}" />
+            <input class="font-size-1 height-2" id="city" type="text" value="{{address.city}}" />
         </dd>
         <br />
-        <dt> State
+        <dt> State :
         </dt>
-        <dd class="view">
+        <dd class="view font-weight-700">
             {{address.state}}
         </dd>
         <dd class="edit">
-            <input id="state" type="text" value="{{address.state}}" />
+            <input class="font-size-1 height-2" id="state" type="text" value="{{address.state}}" />
         </dd>
         <br />
-        <dt> Zip
+        <dt> Zip :
         </dt>
-        <dd class="view">
+        <dd class="view font-weight-700">
             {{address.zip}}
         </dd>
         <dd class="edit">
-            <input id="zip" type="text" value="{{address.zip}}" />
+            <input class="font-size-1 height-2" id="zip" type="text" value="{{address.zip}}" />
         </dd>
         <br />
         <dt></dt>
         <dd class="edit">
-            <input type="submit" value="Save" onclick="save()" />
-            <input type="submit" value="Cancel" onclick="cancel()" />
+            <input class="common-button font-weight-700" type="submit" value="Save" onclick="save()" />
+            <input class="common-button font-weight-700" type="submit" value="Cancel" onclick="cancel()" />
         </dd>
     </dl>
     <script>
-        $(window).on("load", function() {
+        $(window).on("load", function () {
             $('.view').show();
             $('.edit').hide();
 
