@@ -9,8 +9,20 @@ const updateUsers = require("./utils/updateUsers");
 const deleteUsers = require("./utils/deleteUsers");
 const fetchUsersList = require("./utils/fetchUsersList");
 const saveUsersList = require('./utils/saveUsersList');
+const userVerification = require("./utils/userVerification");
 
 let users = [];
+
+// user verification function 
+function verifyUser(req, res, next) {
+    const username = req.params.username.split('-');
+    const verifiedUser = userVerification(users, username[0], username[1])
+    if (!verifiedUser) {
+        res.redirect(`/error/${req.params.username}`);
+    } else {
+        next();
+    }
+}
 
 // handle static file and requests
 app.use("/profile-pics", express.static("images"));
@@ -34,6 +46,11 @@ app.get("/user-list", (req, res) => {
     res.render("index", { users: users });
 });
 
+app.all('/:username', (req, res, next) => {
+    console.log("================================== log user details request  ======================================", req.method, " for ", req.params.username);
+    next();
+})
+
 app.get(/.*ea.*/, (req, res, next) => {
     console.log("================================== User containing ea sub string in name accessed the app ====================================");
     next();
@@ -45,12 +62,26 @@ app.get(/Gia.*/, (req, res, next) => {
 });
 
 
-app.get('/:username', (req, res) => {
+app.get('*.json', (req, res) => {
+    res.download("./data/userDetails.json", 'complete-user-details.json');
+})
+
+app.get('/:username', verifyUser, (req, res) => {
     const username = req.params.username.split('-');
     const user = getUser(users, username[0], username[1]);
     const { address } = user;
     res.render("user", { user: user, address });
 });
+
+app.get('/error/:username', (req, res) => {
+    res.status(404).send(`No user named ${req.params.username} found`);
+});
+
+app.get('/data/:username', (req, res) => {
+    const username = req.params.username.split('-');
+    const user = getUser(users, username[0], username[1]);
+    res.json(user);
+})
 
 app.put('/:username', (req, res) => {
     const username = req.params.username.split('-');
