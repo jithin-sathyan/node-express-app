@@ -5,13 +5,11 @@ const router = express.Router({
     mergeParams: true,
 });
 
-const users = helpers.fetchUsersList();
-
 // user verification function 
 function verifyUser(req, res, next) {
     const username = req.params.username.split('-');
+    const users = helpers.fetchUsersList();
     const verifiedUser = helpers.userVerification(users, username[0], username[1])
-    console.log("======================= user verification =======================", verifiedUser);
     if (!verifiedUser) {
         res.redirect(`/error/${req.params.username}`);
     } else {
@@ -26,6 +24,7 @@ router.all('/', (req, res, next) => {
 
 router.get('/', verifyUser, (req, res) => {
     const username = req.params.username.split('-');
+    const users = helpers.fetchUsersList();
     const user = helpers.getUser(users, username[0], username[1]);
     const { address } = user;
     res.render("user", { user: user, address });
@@ -34,6 +33,7 @@ router.get('/', verifyUser, (req, res) => {
 
 router.put('/', (req, res) => {
     const username = req.params.username.split('-');
+    let users = helpers.fetchUsersList();
     const user = helpers.getUser(users, username[0], username[1]);
     user.address = req.body;
     users = helpers.updateUsers(users, user, username[0], username[1]);
@@ -43,6 +43,7 @@ router.put('/', (req, res) => {
 
 router.delete('/', (req, res) => {
     const username = req.params.username.split('-');
+    let users = helpers.fetchUsersList();
     const user = helpers.getUser(users, username[0], username[1]);
     users = helpers.deleteUsers(users, user, username[0], username[1]);
     helpers.saveUsersList(users);
