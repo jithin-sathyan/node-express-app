@@ -4,15 +4,12 @@ const fs = require('fs');
 // fetch complete user list
 function fetchUsersList() {
     const users = [];
+    let data = [];
     try {
-        fs.readFile("./data/userDetails.json", { encoding: 'utf8' }, (error, data) => {
-            if (error) {
-                throw error
-            }
-            JSON.parse(data).forEach((eachUserData) => {
-                users.push({ ...eachUserData, address: { ...eachUserData.address } });
-            })
-        });
+        data = fs.readFileSync("./data/userDetails.json", { encoding: 'utf8', flag:'r'});
+        JSON.parse(data).forEach((eachUserData) => {
+            users.push({ ...eachUserData, address: { ...eachUserData.address } });
+        })
     }
     catch (error) {
         console.log("====================== Error while reading from user details file =========================", JSON.stringify(error))
