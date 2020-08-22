@@ -1,4 +1,6 @@
 const express = require("express");
+const fs = require("fs");
+const JSONStream = require("JSONStream");
 const app = express();
 const viewEngines = require("consolidate");
 const bodyParser = require('body-parser');
@@ -53,11 +55,26 @@ app.get('/error/:username', (req, res) => {
     res.status(404).send(`No user named ${req.params.username} found`);
 });
 
+app.get('/users/all', (req, res) => {
+    const userReadableStream = fs.createReadStream("./data/userDetails.json");
+    userReadableStream.pipe(res);
+});
+
+app.get('/users/by/:gender', (req, res) => {
+    const genderFilter = req.params.gender;
+    const userReadableStream = fs.createReadStream("./data/userDetails.json");
+    userReadableStream.pipe(JSONStream.parse('*', (userData) => {
+        if (userData.gender === genderFilter) {
+            return `${userData.first_name} ${userData.last_name}`;
+        }
+    })).pipe(JSONStream.stringify('[\n  ', ',\n  ', '\n]\n')).pipe(res);
+});
+
 app.get('/data/:username', (req, res) => {
     const username = req.params.username.split('-');
     const user = helpers.getUser(users, username[0], username[1]);
     res.json(user);
-})
+});
 
 try {
     const server = app.listen(3000, () => {
