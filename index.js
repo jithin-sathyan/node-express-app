@@ -10,6 +10,7 @@ const username = require("./routes/username");
 
 // utils function
 const helpers = require("./utils/helpers");
+const User = require("./db/db").User;
 
 let users = [];
 
@@ -22,6 +23,10 @@ app.engine("hbs", viewEngines.handlebars);
 app.set('veiws', "./views");
 app.set("view engine", "hbs");
 
+app.get("/favicon.ico", (req, res) => {
+    res.end();
+});
+
 app.get("/", (req, res) => {
     res.send("Welcome to node-express app!");
 });
@@ -31,8 +36,12 @@ app.get("/basic-route", (req, res) => {
 });
 
 app.get("/user-list", (req, res) => {
-    users = helpers.fetchUsersList();
-    res.render("index", { users: users });
+    User.find({}, (error, users) => {
+        res.render("index", { users: users }, {
+            allowProtoMethodsByDefault: true,
+            allowProtoPropertiesByDefault: true
+        });
+    })
 });
 
 app.get(/.*ea.*/, (req, res, next) => {
