@@ -1,14 +1,16 @@
 const express = require("express");
 const helpers = require("../utils/helpers");
+const User = require("../db/db").User;
+const mongooseWrapper = require("../db/mongoose-wrapper");
 
 const router = express.Router({
     mergeParams: true,
 });
 
 // user verification function 
-function verifyUser(req, res, next) {
+async function verifyUser(req, res, next) {
     const username = req.params.username.split('-');
-    const users = helpers.fetchUsersList();
+    const users = mongooseWrapper.multipleMongooseToObj(await User.find());
     const verifiedUser = helpers.userVerification(users, username[0], username[1])
     if (!verifiedUser) {
         res.redirect(`/error/${req.params.username}`);
@@ -28,10 +30,9 @@ router.all('/', (req, res, next) => {
     next();
 })
 
-router.get('/', verifyUser, (req, res) => {
+router.get('/', verifyUser, async (req, res) => {
     const username = req.params.username.split('-');
-    const users = helpers.fetchUsersList();
-    const user = helpers.getUser(users, username[0], username[1]);
+    const user = mongooseWrapper.mongooseToObj(await User.findOne({ first_name: username[0], last_name: username[1] }));
     const { address } = user;
     res.render("user", { user: user, address });
 });
@@ -44,21 +45,20 @@ router.use((error, req, res, next) => {
 
 router.put('/', (req, res) => {
     const username = req.params.username.split('-');
-    let users = helpers.fetchUsersList();
-    const user = helpers.getUser(users, username[0], username[1]);
-    user.address = req.body;
-    users = helpers.updateUsers(users, user, username[0], username[1]);
-    helpers.saveUsersList(users);
-    res.end()
+    User.findOneAndUpdate({ first_name: username[0], last_name: username[1] }, { address: req.body }, (err, user) => {
+        console.log("==================================== updated user =======================================", JSON.stringify(user))
+        res.end();
+    });
 });
 
-router.delete('/', (req, res) => {
+router.delete('/', async (req, res) => {
     const username = req.params.username.split('-');
-    let users = helpers.fetchUsersList();
-    const user = helpers.getUser(users, username[0], username[1]);
-    users = helpers.deleteUsers(users, user, username[0], username[1]);
-    helpers.saveUsersList(users);
-    res.end()
+    User.deleteOne({ first_name: username[0], last_name: username[1] }, (err, user) => {
+        if (user) {
+            console.log("==================================== deleted user =======================================", JSON.stringify(user));
+        }
+        res.end();
+    });
 });
 
 module.exports = router;

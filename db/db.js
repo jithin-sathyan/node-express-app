@@ -22,6 +22,13 @@ const userSchema = mongoose.Schema({
         "state": String,
         "zip": String
     }
+}, {
+    toObject: {
+        virtuals: true,
+    },
+    toJSON: {
+        virtuals: true,
+    }
 });
 
 exports.User = mongoose.model('User', userSchema);

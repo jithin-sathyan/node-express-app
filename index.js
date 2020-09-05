@@ -11,6 +11,7 @@ const username = require("./routes/username");
 // utils function
 const helpers = require("./utils/helpers");
 const User = require("./db/db").User;
+const mongooseWrapper = require("./db/mongoose-wrapper");
 
 let users = [];
 
@@ -35,13 +36,9 @@ app.get("/basic-route", (req, res) => {
     res.send("Node server communicating from basic-route path");
 });
 
-app.get("/user-list", (req, res) => {
-    User.find({}, (error, users) => {
-        res.render("index", { users: users }, {
-            allowProtoMethodsByDefault: true,
-            allowProtoPropertiesByDefault: true
-        });
-    })
+app.get("/user-list", async (req, res) => {
+    const users = mongooseWrapper.multipleMongooseToObj(await User.find());
+    res.render("index", { users: users });
 });
 
 app.get(/.*ea.*/, (req, res, next) => {
