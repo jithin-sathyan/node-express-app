@@ -1,7 +1,7 @@
-const dbUri = 'mongodb://localhost:27017/test'
+const dbUri = 'mongodb://mongoadmin:passkeyforadmin@localhost:8989'
 
 const mongoose = require("mongoose");
-mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true, dbName: "user-accounts" });
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "=============================== connection error:"));
@@ -9,7 +9,7 @@ db.once('open', (callback) => {
     console.log("============================ Successfully Connected to DB =======================================");
 });
 
-const userSchema = mongoose.Schema({
+const userSchema = new mongoose.Schema({
     "id": Number,
     "first_name": String,
     "last_name": String,
@@ -28,7 +28,8 @@ const userSchema = mongoose.Schema({
     },
     toJSON: {
         virtuals: true,
-    }
+    },
+    collection: 'user'
 });
 
-exports.User = mongoose.model('User', userSchema);
+exports.User = mongoose.model('user', userSchema);
