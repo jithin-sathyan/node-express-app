@@ -52,7 +52,7 @@ app.get(/Gia.*/, (req, res, next) => {
 });
 
 app.get('*.json', (req, res) => {
-    res.download("./data/userDetails.json", 'complete-user-details.json');
+    res.download("./src/data/userDetails.json", 'complete-user-details.json');
 })
 
 app.use("/:username", username);
@@ -62,13 +62,13 @@ app.get('/error/:username', (req, res) => {
 });
 
 app.get('/users/all', (req, res) => {
-    const userReadableStream = fs.createReadStream("./data/userDetails.json");
+    const userReadableStream = fs.createReadStream("./src/data/userDetails.json");
     userReadableStream.pipe(res);
 });
 
 app.get('/users/by/:gender', (req, res) => {
     const genderFilter = req.params.gender;
-    const userReadableStream = fs.createReadStream("./data/userDetails.json");
+    const userReadableStream = fs.createReadStream("./src/data/userDetails.json");
     userReadableStream.pipe(JSONStream.parse('*', (userData) => {
         if (userData.gender === genderFilter) {
             return `${userData.first_name} ${userData.last_name}`;

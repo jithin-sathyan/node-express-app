@@ -6,7 +6,7 @@ function fetchUsersList() {
     const users = [];
     let data = [];
     try {
-        data = fs.readFileSync("./data/userDetails.json", { encoding: 'utf8', flag:'r'});
+        data = fs.readFileSync("./src/data/userDetails.json", { encoding: 'utf8', flag:'r'});
         JSON.parse(data).forEach((eachUserData) => {
             users.push({ ...eachUserData, address: { ...eachUserData.address } });
         })
@@ -57,7 +57,7 @@ function updateUsers(users, updatedUser, firstName, lastName) {
 // save updated user details into the JSON file
 function saveUsersList(usersList) {
     try {
-        fs.writeFileSync("./data/userDetails.json", JSON.stringify(usersList, null, 2));
+        fs.writeFileSync("./src/data/userDetails.json", JSON.stringify(usersList, null, 2));
         console.log("========================== Completed File Updation for User Details Updation ==========================================")
             ;
     }
