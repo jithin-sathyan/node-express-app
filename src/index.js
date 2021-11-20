@@ -16,7 +16,7 @@ const mongooseWrapper = require("./db/mongoose-wrapper");
 let users = [];
 
 // handle static file and requests
-app.use("/profile-pics", express.static("images"));
+app.use("/profile-pics", express.static("src/images"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // handle view and view engines for templating
